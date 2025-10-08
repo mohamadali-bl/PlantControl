@@ -26,13 +26,17 @@ Soil Moisture Sensor == Sensor to measure soil humidity
 
 ---
 
+### Code and Programming
+The code of this project is written in C++ based on object-oriented programming(OOP). The program has three files for ease, greater readability execution of program. 
+It can be tested, programmed, and compiled in the Arduino IDE program environment, but with some changes it can also be compiled in other environments. Based on the article written by "Power Of Ten", for more information, read the said article.
+
+---
+
 ### How It Works
 1. The soil moisture sensor sends an analog signal representing the soil’s humidity level to the Arduino.  
 2. Arduino reads the value and interprets whether the soil is wet or dry.  
 3. The DS1307 RTC module provides the current time.  
 4. The **LCD** displays both the **moisture level** and **current time** simultaneously.
-
-《Code compiled in Arduino IDE and Programming with it》
 
 ---
 
@@ -73,13 +77,19 @@ You can easily modify this project to include:
 
 ---
 
+### کد و برنامه‌نویسی 
+کد این پروژه بر اساس شی گرایی در زبان سی پلاس پلاس نوشته شده است
+برنامه دارای سه فایل برای سهولت ، خوانایی بیشتر و انجام سریعتر برنامه میباشد
+در فضای برنامه آردوینو ای دی ای تست ، پروگرام و کامپایل پذیر است اما با تغییراتی در محیط های دیگر نیز قابل کامپایل است
+بر اساس مقاله ده قدرت نوشته است ، برای اطلاعات بیشتر مقاله گفته شده را مطالعه فرمایید
+
+---
+
 ### نحوه‌ی کارکرد
 1. سنسور رطوبت مقدار رطوبت خاک را به‌صورت آنالوگ به آردوینو ارسال می‌کند.  
 2. آردوینو مقدار دریافتی را خوانده و وضعیت خاک (مرطوب / خشک) را تعیین می‌کند.  
 3. ماژول DS1307 زمان فعلی را فراهم می‌کند.  
-4. نمایشگر LCD مقدار **رطوبت خاک** و **ساعت جاری** را به‌صورت هم‌زمان نمایش می‌دهد. 
-
-《کد در فضای برنامه آردوینو اجرا و برنامه نویسی شده است》 
+4. نمایشگر LCD مقدار **رطوبت خاک** و **ساعت جاری** را به‌صورت هم‌زمان نمایش می‌دهد.  
 
 ---
 
