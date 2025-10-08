@@ -32,6 +32,8 @@ Soil Moisture Sensor == Sensor to measure soil humidity
 3. The DS1307 RTC module provides the current time.  
 4. The **LCD** displays both the **moisture level** and **current time** simultaneously.
 
+《Code compiled in Arduino IDE and Programming with it》
+
 ---
 
 ### Future Improvements
@@ -75,7 +77,9 @@ You can easily modify this project to include:
 1. سنسور رطوبت مقدار رطوبت خاک را به‌صورت آنالوگ به آردوینو ارسال می‌کند.  
 2. آردوینو مقدار دریافتی را خوانده و وضعیت خاک (مرطوب / خشک) را تعیین می‌کند.  
 3. ماژول DS1307 زمان فعلی را فراهم می‌کند.  
-4. نمایشگر LCD مقدار **رطوبت خاک** و **ساعت جاری** را به‌صورت هم‌زمان نمایش می‌دهد.  
+4. نمایشگر LCD مقدار **رطوبت خاک** و **ساعت جاری** را به‌صورت هم‌زمان نمایش می‌دهد. 
+
+《کد در فضای برنامه آردوینو اجرا و برنامه نویسی شده است》 
 
 ---
 
