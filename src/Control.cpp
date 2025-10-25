@@ -1,16 +1,18 @@
 //*********************************************************//
-#include "Plant.hpp"
+#include "PlantHeader.hpp"
 
 /*
  * 
 */
 
-//Object function----------------------------------------------------//
-MyClass::PlantController(uint8_t Ppin, uint8_t DIYpin, uint8_t Lpin, LiquidCrystal_I2C &lcd_ref, RTC_DS1307 &rtc_ref) :
-  PumpPin(Ppin), DIYSensorPin(DIYpin), LightPin(Lpin), lcd(lcd_ref), rtc(rtc_ref), pumpFlag(false), lightFlag(false), rtcFlag(false) {}
+//Constants----------------------------------------------------------------//
+const unsigned int PumpingTimeLine = 2 * 1e+3; //2s
+const unsigned int Threshold = 800;
+const unsigned int Start_Lighting = 7, End_Lighting = 20;
+const unsigned long LightingTime = 5UL * 60UL * 60UL * 1000UL; //5h
 
 //MAIN---------------------------------------------------------------//
-void MyClass::Main() {
+void MC::Main() {
   Time = rtc.now(); now = millis(); //Update Time
   DIYSensorValue = analogRead(DIYSensorPin);
   if ((DIYSensorValue <= 1030) && (DIYSensorValue > 1)) {
@@ -19,43 +21,41 @@ void MyClass::Main() {
   }
 }
 //PUMP---------------------------------------------------------------//
-void MyClass::Pump() {
-  const unsigned int PumpingTimeLine = 2 * 1e+3; //2s
-  const unsigned int Threshold = 800;
+void MC::Pump() {
   if (!pumpFlag && (DIYSensorValue > Threshold)) {               //Start Pumping
     pumpStartTime = millis();
-    pumpFlag = true; Pumping(PumpPin, HIGH);
+    pumpFlag = true; digitalWrite(PumpPin, HIGH);
   }  
   if (pumpFlag  && ((now - pumpStartTime) >= PumpingTimeLine)) { //Stop Pumping
-    pumpFlag = false; Pumping(PumpPin, LOW);
-  }   
+    pumpFlag = false; digitalWrite(PumpPin, LOW);}   
 }
 //LIGHT--------------------------------------------------------------------//
-void MyClass::Light() {
+void MC::Light() {
   if (rtcFlag == true) {
-    if (LightingTimeLine()) {
-      if (!lightFlag) {lightFlag = true; Lighting(LightPin, LOW);} //Lighting ON
-    }
-    else {lightFlag = false; Lighting(LightPin, HIGH);}            //Lighting OFF
+    if (LightingTimeLine()) if (!lightFlag) {Lighting(true);} //Lighting ON
+    else {Lighting(false);}                                   //Lighting OFF
   }
   else {
-    const unsigned long LightingTime = 5UL * 60UL * 60UL * 1000UL; //5h
     now = millis();
     if ((now - lastLighting) >= LightingTime) {
       lastLighting = now;
       lightFlag = !lightFlag;
-      Lighting(LightPin, lightFlag ? LOW : HIGH);
+      digitalWrite(LightPin, lightFlag ? LOW : HIGH);
     }
   }
 }
 //
-bool MyClass::LightingTimeLine() {
-  const unsigned int Start_Lighting = 7, End_Lighting = 20;
+bool MC::LightingTimeLine() {
   if ((Time.hour() >= Start_Lighting)&&(Time.hour() <= End_Lighting)) {return true;}
   else {return false;}
 }
+//
+void MC::Lighting(bool Flag){
+  if (Flag){lightFlag = true; digitalWrite(LightPin, LOW);}
+  else {lightFlag = false; digitalWrite(LightPin, HIGH);}
+}
 //SET----------------------------------------------------------------------//
-void MyClass::RTC_Set() {
+void MC::RTC_Set() {
   if (!rtc.begin()) {
     Serial.println(F("Couldn't find RTC"));
     Serial.flush(); rtcFlag = false;
@@ -69,7 +69,7 @@ void MyClass::RTC_Set() {
   }
 }
 //
-void MyClass::LCD_Set() {
+void MC::LCD_Set() {
   lcd.init();             //Begin
   lcd.backlight();        //Backlight is ON
   //RTC Validation
@@ -88,7 +88,7 @@ void MyClass::LCD_Set() {
   else {lcd.setCursor(0, 0); lcd.print("LCD Set"); delay(500);} //Valid
 }
 //REAL-TIME----------------------------------------------------------------//
-void MyClass::Clock() {
+void MC::Clock() {
   lcd.print(Time.hour());
   lcd.print(F(":"));
   lcd.print(Time.minute());
@@ -96,7 +96,7 @@ void MyClass::Clock() {
   lcd.print(Time.second());
 }
 //
-void MyClass::Calendar() {
+void MC::Calendar() {
   lcd.print(Time.year());
   lcd.print(F("/"));
   lcd.print(Time.month());
@@ -104,27 +104,29 @@ void MyClass::Calendar() {
   lcd.print(Time.day());
 }
 //
-void MyClass::DayOfWeek() {
+void MC::DayOfWeek() {
   lcd.print(F("\""));
   lcd.print(daysOfWeek[Time.dayOfTheWeek()]);
   lcd.print(F("\""));
 }
 //PRINT--------------------------------------------------------------------//
-void MyClass::Seriall() {
+void MC::Seriall() {
+
+/* 
+ * Print Pump and Light State and
+ * Sensor Value On Serial With Json Type
+*/
   now = millis();
-  if (now - lastSerialPrint >= 1000) { //Print One sedonds
+  if (now - lastSerialPrint >= 1000) {
     lastSerialPrint = now;
-    Serial.print(F("{\"PumpState\": "));
-    Serial.print(pumpFlag ? 1 : 0);
-    Serial.print(F(", \"Humidity\": "));
-    Serial.print(DIYSensorValue);
-    Serial.print(F(", \"LightState\": "));
-    Serial.print(lightFlag ? 1 : 0);
+    Serial.print(F("{\"PumpState\": "));Serial.print(pumpFlag ? 1 : 0);
+    Serial.print(F(", \"Humidity\": "));Serial.print(DIYSensorValue);
+    Serial.print(F(", \"LightState\": "));Serial.print(lightFlag ? 1 : 0);
     Serial.println(F("}"));
   }
 }
 //
-void MyClass::LCD() {
+void MC::LCD() {
   now = millis();
   if (now - lastLCDPrint >= 1000) {                  //Print One sedonds
     lastLCDPrint = now;
@@ -147,11 +149,11 @@ void MyClass::LCD() {
   }
 }
 //
-bool MyClass::LcdTimeLine() {
+bool MC::LcdTimeLine() {
   if (((Time.second() >= 20)&&(Time.second() <= 25))||((Time.second() >= 40)&&(Time.second() <= 45))) {return true;}
   else {return false;}
 }
 //
-void MyClass::Humidity_LCD() {lcd.print(F("Humidity: ")); lcd.print(DIYSensorValue);}
+void MC::Humidity_LCD() {lcd.print(F("Humidity: ")); lcd.print(DIYSensorValue);}
 
 //*********************************************************//
