@@ -1,9 +1,20 @@
-//*********************************************************//
+//*************************************************************************//
 #include "PlantHeader.hpp"
 
-/*
- * 
-*/
+ /******************************************************
+ *  Project: Plant Monitoring System
+ *  Author: Mohammad Ali Balvaieh
+ *  Date: 2025-10
+ *  Description: Arduino-based, soil moisture and time display system
+ *  
+ *  Copyright (c) 2025 Mohammad Ali
+ *  All rights reserved.
+ *  
+ *  Permission is granted to use, copy, modify, and distribute
+ *  this software for non-commercial purposes only, provided
+ *  that this notice is included in all copies or substantial
+ *  portions of the software.
+ ******************************************************/
 
 //Constants----------------------------------------------------------------//
 const unsigned int PumpingTimeLine = 2 * 1e+3; //2s
@@ -20,6 +31,7 @@ void MC::Main() {
     Light(); //Light Control
   }
 }
+
 //PUMP---------------------------------------------------------------//
 void MC::Pump() {
   if (!pumpFlag && (DIYSensorValue > Threshold)) {               //Start Pumping
@@ -28,7 +40,7 @@ void MC::Pump() {
   }  
   if (pumpFlag  && ((now - pumpStartTime) >= PumpingTimeLine)) { //Stop Pumping
     pumpFlag = false; digitalWrite(PumpPin, LOW);}   
-}
+} 
 //LIGHT--------------------------------------------------------------------//
 void MC::Light() {
   if (rtcFlag == true) {
@@ -54,6 +66,7 @@ void MC::Lighting(bool Flag){
   if (Flag){lightFlag = true; digitalWrite(LightPin, LOW);}
   else {lightFlag = false; digitalWrite(LightPin, HIGH);}
 }
+
 //SET----------------------------------------------------------------------//
 void MC::RTC_Set() {
   if (!rtc.begin()) {
@@ -87,6 +100,7 @@ void MC::LCD_Set() {
   }
   else {lcd.setCursor(0, 0); lcd.print("LCD Set"); delay(500);} //Valid
 }
+
 //REAL-TIME----------------------------------------------------------------//
 void MC::Clock() {
   lcd.print(Time.hour());
@@ -109,13 +123,10 @@ void MC::DayOfWeek() {
   lcd.print(daysOfWeek[Time.dayOfTheWeek()]);
   lcd.print(F("\""));
 }
+
 //PRINT--------------------------------------------------------------------//
 void MC::Seriall() {
-
-/* 
- * Print Pump and Light State and
- * Sensor Value On Serial With Json Type
-*/
+/* Print Pump and Light State and Sensor Value On Serial With Json Type */
   now = millis();
   if (now - lastSerialPrint >= 1000) {
     lastSerialPrint = now;
@@ -132,7 +143,7 @@ void MC::LCD() {
     lastLCDPrint = now;
     if (rtcFlag) { //With RTC Module
       if (LcdTimeLine()) {                             //Change Shape Of Print
-        if (Time.second() == 20 || Time.second() == 40) {Clear(0, 0); Clear(0, 1);} //Clear Lines
+        if (Time.second() == 20 || Time.second() == 40) {Clear(0, 0); Clear(0, 1);}
         lcd.setCursor(0, 0);  Clock(); Space();        //Print Clock
         lcd.setCursor(0, 1);  Calendar();              //Print Calender
         lcd.setCursor(11, 1); DayOfWeek();             //Print Days
@@ -150,10 +161,10 @@ void MC::LCD() {
 }
 //
 bool MC::LcdTimeLine() {
-  if (((Time.second() >= 20)&&(Time.second() <= 25))||((Time.second() >= 40)&&(Time.second() <= 45))) {return true;}
+  if (((Time.second() >= 20)&&(Time.second() <= 25)) ||
+      ((Time.second() >= 40)&&(Time.second() <= 45))) {return true;}
   else {return false;}
 }
 //
 void MC::Humidity_LCD() {lcd.print(F("Humidity: ")); lcd.print(DIYSensorValue);}
-
-//*********************************************************//
+//*************************************************************************//
