@@ -1,14 +1,25 @@
-//*********************************************************//
+//*************************************************************************//
 #ifndef PLANTHEADER_H
 #define PLANTHEADER_H
 #include <Arduino.h>
 #include <RTClib.h>            //RTC
+#include <Wire.h>              //I2C
 #include <LiquidCrystal_I2C.h> //LCD
-#include <Wire.h>              //I2C LCD
 
-/*
- * 
-*/
+ /******************************************************
+ *  Project: Plant Monitoring System
+ *  Author: Mohammad Ali Balvaieh
+ *  Date: 2025-10
+ *  Description: Arduino-based, soil moisture and time display system
+ *  
+ *  Copyright (c) 2025 Mohammad Ali
+ *  All rights reserved.
+ *  
+ *  Permission is granted to use, copy, modify, and distribute
+ *  this software for non-commercial purposes only, provided
+ *  that this notice is included in all copies or substantial
+ *  portions of the software.
+ ******************************************************/
 
 //Constants----------------------------------------------------------------//
 extern RTC_DS1307 RTC;
@@ -55,4 +66,4 @@ class PlantClass {
 };
 
 #endif //PLANTHEADER_H
-//*********************************************************//
+//*************************************************************************//
