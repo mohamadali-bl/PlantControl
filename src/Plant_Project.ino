@@ -1,8 +1,9 @@
 //*********************************************************//
 #include "PlantHeader.hpp"
 
-/*
- * 
+/* Set wiring diagram and Set Pins
+ * Install the necessary Arduino libraries (`Wire.h`, `LiquidCrystal_I2C.h`, etc.)
+ * Run and Upload this File on Arduino IDE 
 */
 
 //Set Pins
@@ -25,4 +26,5 @@ void loop() {
   Saye.Main(); Saye.LCD(); Saye.Seriall();
 }
 //*********************************************************//
+
 
